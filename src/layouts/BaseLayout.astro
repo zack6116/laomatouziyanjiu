@@ -5,11 +5,16 @@ import { SOCIAL } from "../lib/social";
 interface Props {
   title: string;
   description?: string;
+  path?: string;
 }
 
-const { title, description = "老马投资研究 — 周期视角下的行业投研与交易心得" } = Astro.props;
+const { title, description = "老马投资研究 — 周期视角下的行业投研与交易心得", path } = Astro.props;
 const user = Astro.locals.user;
 const pageTitle = title === "老马投资研究" ? title : `${title} · 老马投资研究`;
+// 线上经 coderfather-router 以 /laomatou/ 前缀提供服务，canonical 用带前缀的正式域名
+const siteUrl = "https://coderfather.com/laomatou/";
+const pageUrl = path ? `https://coderfather.com/laomatou/${path}` : siteUrl;
+const ogImage = "https://coderfather.com/og.png";
 ---
 
 <!doctype html>
@@ -20,6 +25,25 @@ const pageTitle = title === "老马投资研究" ? title : `${title} · 老马�
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{pageTitle}</title>
+    <link rel="canonical" href={pageUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="老马投资研究" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "老马投资研究",
+      url: siteUrl,
+      description,
+      inLanguage: "zh-CN",
+      author: { "@type": "Organization", name: "老马投资研究", url: siteUrl },
+    })} />
   </head>
   <body>
     <header class="site-header">
